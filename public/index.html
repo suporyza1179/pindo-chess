@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 
-    
+    <link href="https://ppobindo.com/asu/css/bootstrap.min.css" rel=stylesheet>
     <link href="https://ppobindo.com/asu/css/horizontal-menu.css" rel=stylesheet>
     <link href="https://ppobindo.com/asu/css/app-style.css" rel=stylesheet>
     <link href="https://ppobindo.com/asu/css/style-main2.css" rel=stylesheet>
@@ -22,11 +22,68 @@
     <link rel="stylesheet" href="./css/styles.css">
     <script src="https://kit.fontawesome.com/YOUR_KIT_CODE.js" crossorigin="anonymous"></script>
     <style>
-        #status {
-            color: var(--font-color);
-            display: inline-block; 
-            background-color: rgb(118, 89, 199);
+        .text-center {
+          text-align: center;
         }
+        
+        .section-heading {
+        
+          color: var(--bottom-color);
+        }
+        #status {
+            font-weight:400px;
+          text-align: center;
+          font-size: calc(18px + 3vh);
+          line-height: calc(18px + 3vh);
+          text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500, 0 0 40px #ffa500, 0 0 60px #ff0000, 0 0 10px #ff8d00, 0 0 98px #ff0000;
+            color: #fff6a9;
+          animation: blink 12s infinite;
+          -webkit-animation: blink 12s infinite;
+        }
+        @-webkit-keyframes blink {
+          20%,
+          24%,
+          55% {
+            color: #111;
+            text-shadow: none;
+          }
+        
+          0%,
+          19%,
+          21%,
+          23%,
+          25%,
+          54%,
+          56%,
+          100% {
+        
+          text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500, 0 0 40px #ffa500, 0 0 60px #ff0000, 0 0 10px #ff8d00, 0 0 98px #ff0000;
+            color: #fff6a9;
+          }
+        }
+        
+        @keyframes blink {
+          20%,
+          24%,
+          55% {
+            color: #111;
+            text-shadow: none;
+          }
+        
+          0%,
+          19%,
+          21%,
+          23%,
+          25%,
+          54%,
+          56%,
+          100% {
+        
+          text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500, 0 0 40px #ffa500, 0 0 60px #ff0000, 0 0 10px #ff8d00, 0 0 98px #ff0000;
+            color: #fff6a9;
+          }
+        }
+
         #myBoard {
             width: 569px; 
             margin: auto; 
@@ -226,7 +283,7 @@
                         <!--<label>
                             <h3><strong>STATUS</strong></h3>
                         </label> -->
-                        <div id="status"><h3 style="color:var(--font-color)"><strong>Giliran Kamu</strong></h3></div>
+                        <div id="status" class="text-center section-heading"></div>
                     </div>
                    <!---- <div>
                         <label>
