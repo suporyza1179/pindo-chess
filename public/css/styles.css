@@ -1,10 +1,24 @@
-html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
+:root {
+  --primary-color: #1e2124;
+  --secondary-color: #151819;
+  --font-color: #fff;
+  --bg-color: #1e2124;
+  --heading-color: #f50707;
+  --bg-cardcolor : #f50707;
 }
 
+[data-theme="dark"] {
+  --primary-color: #fff;
+  --secondary-color: #ecf0f1;
+  --font-color: #000;
+  --bg-color: #fff;
+  --heading-color: #f50707;
+  --bg-cardcolor : #f50707;
+}
+ 
 body {
+    background-color: var(--bg-color);
+    color: var(--font-color);
     margin: 0;
     padding: 0;
     height: 100%;
@@ -12,6 +26,16 @@ body {
     display:flex; 
     flex-direction:column; 
 }
+
+
+
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+
  #singlePlayer, #multiPlayer, #joinButton{
     margin: 10px;
     width: 300px;
