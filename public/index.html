@@ -2,11 +2,47 @@
 <html>
 
 <head>
-    <title>AMEY</title>
+    <title>PindoChess</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://ppobindo.com/asu/plugins/summernote/dist/summernote-bs4.css" rel=stylesheet>
+<link href="https://ppobindo.com/asu/plugins/simplebar/css/simplebar.css" rel=stylesheet>
+<link href="https://ppobindo.com/asu/css/bootstrap.min.css" rel=stylesheet>
+<link href="https://ppobindo.com/asu/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css" rel=stylesheet>
+<link href="https://ppobindo.com/asu/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css" rel=stylesheet>
+<link href="https://ppobindo.com/asu/css/animate.css" rel=stylesheet>
+<link href="https://ppobindo.com/asu/css/icons.css" rel=stylesheet>
+<link href="https://ppobindo.com/asu/css/horizontal-menu.css" rel=stylesheet>
+<link href="https://ppobindo.com/asu/css/app-style.css" rel=stylesheet>
+<link href="https://ppobindo.com/asu/css/style-main2.css" rel=stylesheet>
+
+
     <link rel="icon" href="./img/icon.jpg">
     <link rel="stylesheet" type="text/css" href="./css/semantic.min.css">
     <link rel="stylesheet" href="./css/chessboard-1.0.0.min.css">
     <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://kit.fontawesome.com/YOUR_KIT_CODE.js" crossorigin="anonymous"></script>
+    <style>
+        #status {
+            color: var(--font-color);
+            display: inline-block; 
+            background-color: rgb(118, 89, 199);
+        }
+        #myBoard {
+            width: 569px; 
+            margin: auto; 
+            margin-top: 10px; 
+            margin-bottom: 10px;
+        }
+        @media (max-width: 768px) {
+        #myBoard {
+        width: 100%;
+      }
+      .board-b72b1{
+        width: 100%;
+      }
+    }
+    </style>
 </head>
 
 <body>
@@ -19,7 +55,24 @@
         Your browser does not support the audio element.
     </audio>
     <!-- Navbar -->
-    <div>
+
+
+    <header>
+    <nav class="fixed-top navbar navbar-expand-lg navbar-light shadow-sm" style="background: url(https://ppobindo.com/sebar/footer.png) no-repeat center center var(--secondary-color);"><div class="container-fluid"><a class="navbar-brand" href="https://ppobindo.com"><img src="https://ppobindo.com/asu/images/flipi.gif" style="width:50px;height:50px"> <img src="https://ppobindo.com/sebar/logo_oryza1_20241308003108.png" style="width:auto;height:35px;color:#fff!important" alt="logo icon"></a><div class="mt-2 theme-switch-wrapper"><label class="theme-switch" for="checkbox"><input id="checkbox" type="checkbox"><div class="round slider"></div></label></div>
+<button class="navbar-toggler collapsed d-flex d-lg-none flex-column justify-content-around" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+    <span class="toggler-icon top-bar"></span>
+    <span class="toggler-icon middle-bar"></span>
+    <span class="toggler-icon bottom-bar"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="ml-auto navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="https://ppobindo.com"><i class="fa fa-home pr-2" style="color:var(--font-color)">   Beranda</i></a></li><li class="nav-item"><a class="nav-link" href="https://ppobindo.com/harga/"><i class="fa fa-tag" style="color:var(--font-color)">   Harga</i></a></li><li class="nav-item"><a class="nav-link" href="https://ppobindo.com/calc"><i class="fa fa-calculator" style="color:var(--font-color)">      Alat</i></a></li><li class="nav-item"><a class="nav-link" href="https://ppobindo.com/tvku/trans7"><i class="fa-solid fa-tv" style="color:var(--font-color)">    Live TV</i></a></li><li class="nav-item"><a class="nav-link" href="https://ppobindo.com/login/"><span class="rounded-circle mr-1"><i class="fa-sign-in-alt fas" style="color:var(--font-color)">   Masuk</i></span></a></li></ul></div>
+        </div></nav><script></script></header>
+ 
+
+
+     
+    <!--<div>
         <div style="margin: 0; border-bottom: 4px solid gray; padding: 3px 0; " class="ui secondary menu">
             <img src="./img/icon.png" style="width:80px;height:80px;">
             <h2 style="text-decoration: underline;">CHESS GAME</h2>
@@ -45,12 +98,41 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
+<div class="clearfix pt-5"></div>
+ <div class="pt-5 pb-5">
+      <div class="container">
+       <div class="row">
+          <div class="col-lg-12">
+          
+              <div style="margin-top:20px; height: 40px; padding-right: 20px; margin-right: 15px;display: none;"
+                    class="ui labeled button" tabindex="0">
+                    <div class="ui button">
+                        <i class="user icon"></i> #PLAYERS
+                    </div>
+                    <a class="ui basic label">
+                        <span id="players">0</span>
+                    </a>
+                </div>
 
-
-    <div>
+                <div style="margin-top:20px; height: 40px; padding-left: 20px;  margin-right: 15px;display: none;"
+                    class="ui labeled button" tabindex="0">
+                    <div class="ui button">
+                        <i class="star icon"></i> #ROOMS
+                    </div>
+                    <a class="ui basic label">
+                        <span id="rooms">0</span>
+                    </a>
+                </div>
+            </div>
+          </div>
+    <div class="row">
+    <div class="col-lg-12">
         <div id="gameMode">
-            <h1 style="text-align: center; margin: 10px; font-size: 35px;"> GAME MODE</h1>
+            <div style="text-align:center;">
+            <img src="./img/icon.png" style="width:80px;height:80px;">
+            <h1 style="color:var(--font-color);text-align: center; margin: 10px; font-size: 35px;"> Pindo Chess</h1>
+            </div>
             <div style="text-align:center;">
                 <button class="game ui black button " id="singlePlayer">SINGLE PLAYER</button>
             </div>
@@ -61,19 +143,19 @@
 
         <div id="joinFormDiv" style="display: none;">
             <form id="joinForm">
-                <h1 style="text-align: center; margin: 10px; font-size: 35px;">START GAME</h1>
+                <h1 style="color:var(--font-color);text-align: center; margin: 10px; font-size: 35px;">START GAME</h1>
                 <div style="text-align:center;">
-                    <input class="formInput" type="text" placeholder="Name" style="padding: 10px;">
+                    <input class="formInput" type="text" placeholder="Nama Kamu" style="padding: 10px;">
                 </div>
                 <div style="text-align:center;">
-                    <input class="formInput" type="text" placeholder="Room" style="padding: 10px;">
+                    <input class="formInput" type="text" placeholder="Nama Room(Kosongkan Bila Join Room)" style="padding: 10px;">
                 </div>
                 <div id="roomDropdownP" style="text-align:center;  height: 50px; margin: 10px; padding: 0 4px; ">
                     <div id="roomDropdown" class="ui fluid search selection dropdown"
                         style="border: 1px solid gray; width: 300px; margin:auto;">
                         <input type="hidden" name="country">
                         <i class="dropdown icon"></i>
-                        <div class="default text">SELECT ROOM</div>
+                        <div class="default text">Gabung Room</div>
                         <div class="menu" id="dropRooms">
                             <!-- <div class="item" data-value="af"><i class="icon star"></i>Afghanistan</div>
                             <div class="item" data-value="ar"><i class="icon star"></i>Argentina</div> -->
@@ -81,55 +163,69 @@
                     </div>
                 </div>
                 <div style="text-align:center;">
-                    <button class="game ui black button " id="joinButton">JOIN</button>
+                    <button class="game ui black button " id="joinButton">Submit</button>
                 </div>
                 <div style="text-align:center;">
-                    <p id="message"></p>
+                    <p style="color:var(--font-color)" id="message"></p>
                 </div>
             </form>
         </div>
-
+</div>
+</div>
         <!-- /Input Form -->
-        <div>
+        <div class="row">
+            <div class="col-lg-12">
             <!-- Chess Board -->
             <div id="chessGame" style="display: none;">
                 <!-- Color Schemes -->
-                <div style="text-align: center; margin: 10px;">
-                    <button id="grey_board" class="ui button black color_b">GREY</button>
-                    <button id="orange_board" class="ui button grey color_b">ORANGE</button>
-                    <button id="green_board" class="ui button grey color_b">GREEN</button>
-                    <button id="blue_board" class="ui button grey color_b">BLUE</button>
-                </div>
+               
                 <!-- Status and PGN -->
                 <div id="statusPGN" style="text-align: center; display: none;">
                     <div>
-                        <label>
+                        <!--<label>
                             <h3><strong>STATUS</strong></h3>
-                        </label>
-                        <div id="status">YOUR TURN</div>
+                        </label> -->
+                        <div id="status"><h3 style="color:var(--font-color)"><strong>Giliran Kamu</strong></h3></div>
                     </div>
-                    <div>
+                   <!---- <div>
                         <label>
                             <h3><strong>HISTORY</strong></h3>
                         </label>
                         <div id="pgn" style="overflow: auto; white-space: nowrap; width: 500px; margin: auto;"></div>
-                    </div>
+                    </div> -->
                 </div>
-                <div id="myBoard" style="width: 569px; margin: auto; margin-top: 10px; margin-bottom: 10px;"></div>
-                <div style="text-align: center; margin-bottom: 20px;">
+                <div id="myBoard"></div>
+                <div style="text-align: center; margin-bottom: 20px;display: none;">
                     <a href="/" class="ui button black" style="width: 569px;">LEAVE GAME</a>
                 </div>
-
+                <div style="position: fixed; bottom: 0; left: 0;; margin: 10px;">
+                    <div class="btn-group dropup">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Warna
+                        </button>
+                        <div class="dropdown-menu">
+                             <div id="grey_board" class="ui button black color_b">GREY</div>
+                            <div id="orange_board" class="ui button grey color_b">ORANGE</div>
+                            <div id="green_board" class="ui button grey color_b">GREEN</div>
+                            <div id="blue_board" class="ui button grey color_b">BLUE</div>
+                        </div>
+                    </div>
+                
+                </div>
             </div>
         </div>
     </div>
+</div>
+</div>
+               
 
     <!-- Chatting window -->
     <div id="chat"
-        style=" background-color: white; display: none; text-align: right; position: fixed; bottom: 0; right: 0; width: 400px; margin-right: 10px; border: 2px solid black;">
+        style=" background-color: white; display: none; text-align: right; position: fixed; bottom: 0; right: 0; margin-right: 10px; border: 2px solid black;">
+        
         <div class="ui button grey" style="border-radius: 0; width: 100%; padding: 15px; font-size: 16px;"
             id="messageBox">
-            MESSAGES
+            CHAT
         </div>
         <div id="chatBox" style="display: none; padding: 12px;">
             <div id="chatContent" style="height: 240px; overflow-y: auto; word-break: break-all; ">
@@ -145,9 +241,11 @@
             </form>
         </div>
     </div>
-    <div
-        style="background-color: black; color: white; margin-top:auto; padding: 15px; text-align: center; font-size: 15px;">
-        <i>"Avoid the crowd. Do your own thinking independently. Be the chess player, not the chess piece"</i></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    
+   
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script src="./js/semantic.min.js"></script>
@@ -157,6 +255,12 @@
         integrity="sha384-s3XgLpvmHyscVpijnseAmye819Ee3yaGa8NxstkJVyA6nuDFjt59u1QvuEl/mecz"
         crossorigin="anonymous"></script>
     <script src="./js/app.js"></script>
+ <script>function switchTheme(e){e.target.checked?document.documentElement.setAttribute("data-theme","dark"):document.documentElement.setAttribute("data-theme","light")}function switchTheme(e){e.target.checked?(document.documentElement.setAttribute("data-theme","dark"),localStorage.setItem("theme","dark")):(document.documentElement.setAttribute("data-theme","light"),localStorage.setItem("theme","light"))}const toggleSwitch=document.querySelector('.theme-switch input[type="checkbox"]')
+toggleSwitch.addEventListener("change",switchTheme,!1)
+const currentTheme=localStorage.getItem("theme")?localStorage.getItem("theme"):null
+currentTheme&&(document.documentElement.setAttribute("data-theme",currentTheme),"dark"===currentTheme&&(toggleSwitch.checked=!0))
+</script> 
+
 </body>
 
 </html>
