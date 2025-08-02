@@ -6,6 +6,7 @@ const ChatEl = document.querySelector('#chat')
 const sendButtonEl = document.querySelector('#send')
 const roomsListEl = document.getElementById('roomsList');
 const myAudioEl = document.getElementById('myAudio');
+const winAudio = document.getElementById('winAudio');
 const singlePlayerEl = document.getElementById('singlePlayer');
 const multiPlayerEl = document.getElementById('multiPlayer');
 const totalRoomsEl = document.getElementById('rooms')
@@ -40,8 +41,10 @@ function onDragStart2(source, piece, position, orientation) {
         else if (game.in_checkmate())
             if (turnt === 1) {
                 alert('KAMU PEMENANGNYA!!');
+                winAudio.play();
             } else {
                 alert('KALAH NIYEE!!');
+                winAudio.play();
             }
         return false
     }
@@ -177,9 +180,11 @@ socket.on('gameOver', (turn, win) => {
     if (win) {
         if (board.orientation().includes(turn)) {
             statusEl.textContent = "KALAH NIYEE :)"
+            winAudio.play();
         }
         else {
             statusEl.textContent = "SELAMAT KAMU ORANG PINTER!!"
+            winAudio.play();
         }
     }
     else {
@@ -321,41 +326,25 @@ const removeClass = () => {
 // Color Buttons
 document.getElementById('grey_board').addEventListener('click', e => {
     e.preventDefault();
-    removeClass();
-    document.getElementById('grey_board').classList.add('black');
-    document.getElementById('orange_board').classList.add('grey');
-    document.getElementById('green_board').classList.add('grey');
-    document.getElementById('blue_board').classList.add('grey');
+    
     applyColorScheme("#E1E1E1", "#FFFFFF");
 })
 
 document.getElementById('orange_board').addEventListener('click', e => {
     e.preventDefault();
-    removeClass();
-    document.getElementById('grey_board').classList.add('grey');
-    document.getElementById('orange_board').classList.add('black');
-    document.getElementById('green_board').classList.add('grey');
-    document.getElementById('blue_board').classList.add('grey');
+    
     applyColorScheme("#D18B47", "#FFCE9E");
 })
 
 document.getElementById('green_board').addEventListener('click', e => {
     e.preventDefault();
-    removeClass();
-    document.getElementById('grey_board').classList.add('grey');
-    document.getElementById('orange_board').classList.add('grey');
-    document.getElementById('green_board').classList.add('black');
-    document.getElementById('blue_board').classList.add('grey');
+    
     applyColorScheme("#58AC8A", "#FFFFFF");
 })
 
 document.getElementById('blue_board').addEventListener('click', e => {
     e.preventDefault();
-    removeClass();
-    document.getElementById('grey_board').classList.add('grey');
-    document.getElementById('orange_board').classList.add('grey');
-    document.getElementById('green_board').classList.add('grey');
-    document.getElementById('blue_board').classList.add('black');
+    
     applyColorScheme("#727FA2", "#C3C6BE");
 })
 
