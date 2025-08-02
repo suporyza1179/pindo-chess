@@ -379,3 +379,12 @@ document.getElementById('warna').addEventListener('click', e => {
         document.getElementById('gantiWarna').style.display = 'none';
     }
 })
+document.getElementById('togel').addEventListener('click', e => {
+    e.preventDefault();
+    var style = window.getComputedStyle(document.getElementById('menulist'));
+    if (style.display === 'none') {
+        document.getElementById('menulist').style.display = 'block';
+    } else {
+        document.getElementById('menulist').style.display = 'none';
+    }
+})
