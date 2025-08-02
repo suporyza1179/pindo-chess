@@ -369,3 +369,13 @@ document.getElementById('messageBox').addEventListener('click', e => {
         document.getElementById('chatBox').style.display = 'none';
     }
 })
+
+document.getElementById('warna').addEventListener('click', e => {
+    e.preventDefault();
+    var style = window.getComputedStyle(document.getElementById('gantiWarna'));
+    if (style.display === 'none') {
+        document.getElementById('gantiWarna').style.display = 'block';
+    } else {
+        document.getElementById('gantiWarna').style.display = 'none';
+    }
+})
