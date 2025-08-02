@@ -296,14 +296,22 @@
                 <div style="text-align: center; margin-bottom: 20px;display: none;">
                     <a href="/" class="ui button black" style="width: 569px;">LEAVE GAME</a>
                 </div>
-                <div style="position: fixed; bottom: 0; left: 0;; margin: 10px;">
-                   
-                        <div class="menu">
-                            <button class="ui.dropdown">WARNA</button>
-                            <div class="item"  id="grey_board"><i class="icon star"></i>GREY</div>
-                            <div class="item" id="orange_board"><i class="icon star"></i>ORANGE</div>
-                        </div>
-                </div>
+               <div style="position: fixed; bottom: 0; left: 0;; margin: 20px;">
+                   <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button type="button" class="btn btn-danger dropdown-toggle" id="warna">Warna</button>
+                       
+                        <button type="button" class="btn btn-primary">Nyerah</button>
+                        <button type="button" class="btn btn-success">Game Lain</button>
+                   </div>
+                   </div>
+                     <div class="menu" id="gantiWarna" style="color:var(--font-color);font-weight: bold;display: none;bottom: 50px; left: -210px;position: absolute;">
+                        <ul class="item">
+                            <li><button class="dropdown-item" type="button" id="grey_board"><p style="color:var(--font-color);">Grey</p></button></li>
+                            <li><button class="dropdown-item" type="button" id="orange_board"><p style="color:var(--font-color);">Orange</p></button></li>
+                            <li><button class="dropdown-item" type="button" id="green_board"><p style="color:var(--font-color);">Green</p></button></li>
+                            <li><button class="dropdown-item" type="button" id="blue_board"><p style="color:var(--font-color);">Blue</p></button></li>
+                        </ul>
+                     </div>
             </div>
         </div>
     </div>
@@ -315,7 +323,7 @@
     <div id="chat"
         style=" background-color: white; display: none; text-align: right; position: fixed; bottom: 0; right: 0; margin-right: 10px; border: 2px solid black;">
         
-        <div class="ui button grey" style="border-radius: 0; width: 100%; padding: 15px; font-size: 16px;"
+        <div class="ui button green" style="border-radius: 0; width: 100%; padding: 15px; font-size: 14px;"
             id="messageBox">
             CHAT
         </div>
