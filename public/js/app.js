@@ -36,14 +36,14 @@ function onDragStart2(source, piece, position, orientation) {
     // do not pick up pieces if the game is over
     if (game.game_over()) {
         if (game.in_draw()) {
-            alert('Game Draw!!');
+            alert('Remis!!');
         }
         else if (game.in_checkmate())
             if (turnt === 1) {
-                alert('KAMU PEMENANGNYA!!');
+                alert('Keren 🎉 Menang...!!');
                 winAudio.play();
             } else {
-                alert('KALAH NIYEE!!');
+                alert('Kalah Niyeee..😄');
                 winAudio.play();
             }
         return false
@@ -157,10 +157,10 @@ socket.on('Dragging', id => {
 //To Update Status Element
 socket.on('updateStatus', (turn) => {
     if (board.orientation().includes(turn)) {
-        statusEl.textContent = "GILIRAN KAMU"
+        statusEl.textContent = "▶️ Giliran Kamu"
     }
     else {
-        statusEl.textContent = "GILIRAN LAWAN..SABAR YA"
+        statusEl.textContent = "⌛Giliran Lawan..Sabar ya"
     }
 })
 
@@ -174,23 +174,6 @@ socket.on('inCheck', turn => {
     }
 })
 
-//If win or draw
-socket.on('gameOver', (turn, win) => {
-    config.draggable = false;
-    if (win) {
-        if (board.orientation().includes(turn)) {
-            statusEl.textContent = "KALAH NIYEE :)"
-            winAudio.play();
-        }
-        else {
-            statusEl.textContent = "SELAMAT KAMU ORANG PINTER!!"
-            winAudio.play();
-        }
-    }
-    else {
-        statusEl.value = 'Game Draw'
-    }
-})
 
 //Client disconnected in between
 socket.on('disconnectedStatus', () => {
@@ -248,6 +231,30 @@ socket.on('updateTotalUsers', totalUsers => {
     totalPlayersEl.innerHTML = totalUsers;
 })
 
+socket.on("gameOver", (turn, isCheckmate, surrendered) => {
+  if (surrendered) {
+    if (socket.id !== turn) {
+      statusEl.textContent = "🎉 Menang..Lawan Menyerah"
+    } else {
+      statusEl.textContent = "Menyerah Kalah!"
+    }
+  } else if (isCheckmate) {
+    winAudio.play();
+       
+            if (board.orientation().includes(turn)) {
+            statusEl.textContent = "Kalah Niyeee..😄"
+            }
+                else {
+                statusEl.textContent = "Keren..🎉 Kamu Menang!!"
+            }
+   
+  } else {
+   statusEl.textContent = "Remis!"
+  }
+
+  // Set game status, disable board, dsb
+});
+
 //Message will be sent only after you click the button
 sendButtonEl.addEventListener('click', (e) => {
     e.preventDefault()
@@ -282,7 +289,7 @@ joinButtonEl.addEventListener('click', (e) => {
             else    //to reload even if negative confirmation
                 window.location.reload();
         })
-        messageEl.textContent = "Menunggu Lawan"
+        messageEl.textContent = "Menunggu Lawan..."
     }
 })
 
@@ -314,14 +321,6 @@ const applyColorScheme = (black, white) => {
     }
 }
 
-//For removing class from all buttons
-const removeClass = () => {
-    const buttonEl = document.querySelectorAll('.color_b');
-    for (var i = 0; i < buttonEl.length; i++) {
-        buttonEl[i].classList.remove('black');
-        buttonEl[i].classList.remove('grey');
-    }
-}
 
 // Color Buttons
 document.getElementById('grey_board').addEventListener('click', e => {
@@ -368,12 +367,19 @@ document.getElementById('warna').addEventListener('click', e => {
         document.getElementById('gantiWarna').style.display = 'none';
     }
 })
-document.getElementById('togel').addEventListener('click', e => {
-    e.preventDefault();
-    var style = window.getComputedStyle(document.getElementById('menulist'));
-    if (style.display === 'none') {
-        document.getElementById('menulist').style.display = 'block';
-    } else {
-        document.getElementById('menulist').style.display = 'none';
-    }
-})
+
+document.getElementById('surrenderBtn')?.addEventListener('click', () => {
+    
+  const confirmation = confirm("Apakah kamu yakin ingin menyerah?");
+  if (confirmation) {
+    
+    var room = formEl[1].value;
+    config.draggable = false;
+    socket.emit('surrender', { room })
+
+  //  statusEl.textContent = "Menyerah"
+    winAudio.play();
+    
+  }
+});
+
