@@ -52,7 +52,7 @@ io.on('connection', (socket) => {
     socket.on('joinRoom', ({ user, room }, callback) => {
         //We have to limit the number of users in a room to be just 2
         if (io.nsps['/'].adapter.rooms[room] && io.nsps['/'].adapter.rooms[room].length === 2) {
-            return callback('Already 2 users are there in the room!')
+            return callback('Room Penuh!')
         }
 
         var alreadyPresent = false
@@ -64,7 +64,7 @@ io.on('connection', (socket) => {
         // console.log(userData);
         //If same name user already present
         if (alreadyPresent) {
-            return callback('Choose different name!')
+            return callback('Nama ada yang sama!')
         }
 
         socket.join(room)
@@ -118,6 +118,13 @@ io.on('connection', (socket) => {
     socket.on('sendMessage', ({ user, room, message }) => {
         io.to(room).emit('receiveMessage', user, message)
     })
+
+    // Handle surrender
+    socket.on('surrender', ({ room }) => {
+        const game = gameData[socket.id];
+        if (!game) return;
+        io.to(room).emit('gameOver', socket.id, true, true); // surrendering player, checkmate=true, surrendered=true
+    });
 
     //Disconnected
     socket.on('disconnect', () => {
