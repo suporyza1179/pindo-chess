@@ -4,10 +4,10 @@
 <head>
     <title>PindoChess</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous" />
-    <link rel="stylesheet" href="style.css" />
+   
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 
@@ -33,8 +33,8 @@
         #status {
             font-weight:400px;
           text-align: center;
-          font-size: calc(18px + 3vh);
-          line-height: calc(18px + 3vh);
+          font-size: calc(10px + 3vh);
+          line-height: calc(10px + 3vh);
           text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500, 0 0 40px #ffa500, 0 0 60px #ff0000, 0 0 10px #ff8d00, 0 0 98px #ff0000;
             color: #fff6a9;
           animation: blink 12s infinite;
@@ -116,9 +116,8 @@
     </audio>
     <!-- Navbar -->
 
-
-    <header>
-    <nav class="fixed-top navbar navbar-expand-lg navbar-light shadow-sm" style="background: url(https://ppobindo.com/sebar/footer.png) no-repeat center center var(--secondary-color);">
+ <header>
+     <nav class="fixed-top navbar navbar-expand-lg navbar-light shadow-sm" style="background: url(https://ppobindo.com/sebar/footer.png) no-repeat center center var(--secondary-color);">
         <div class="container-fluid">
             <a class="navbar-brand" href="https://ppobindo.com" target="_top">
                 <img src="https://ppobindo.com/asu/images/flipi.gif" style="width:50px;height:50px"> 
@@ -130,47 +129,15 @@
                     <div class="round slider"></div>
                 </label>
             </div>
+      
 
-          <div id="togel">
-            <button class="navbar-toggler collapsed d-flex d-lg-none flex-column justify-content-around" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" data-target="#navbarSupportedContent" data-bs-toggle="collapse" type="button">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="toggler-icon top-bar"></span>
                 <span class="toggler-icon middle-bar"></span>
                 <span class="toggler-icon bottom-bar"></span>
             </button>
-            <div class="menu" id="menulist" style="display: none;">
-               <div class="item">
-                        <a class="nav-link" href="https://ppobindo.com" target="_top">
-                            <i class="fa fa-home pr-2">   Beranda</i>
-                        </a>
-                    </div>
-                    <div class="item">
-                        <a class="nav-link" href="https://ppobindo.com/harga/" target="_top">
-                            <i class="fa fa-tag" style="color:var(--font-color)">   Harga</i>
-                        </a>
-                    </div>
-                    <div class="item">
-                        <a class="nav-link" href="https://ppobindo.com/calc" target="_top">
-                            <i class="fa fa-calculator" style="color:var(--font-color)">      Alat</i>
-                        </a>
-                    </div>
-                    <div class="item">
-                        <a class="nav-link" href="https://ppobindo.com/tvku/trans7" target="_top">
-                            <i class="fa-solid fa-tv" style="color:var(--font-color)">    Live TV</i>
-                        </a>
-                    </div>
-                    <div class="item">
-                        <a class="nav-link" href="https://ppobindo.com/login/" target="_top">
-                            <span class="rounded-circle mr-1">
-                                <i class="fa-sign-in-alt fas" style="color:var(--font-color)">   Masuk</i>
-                            </span>
-                        </a>
-                    </div>
-            
-            </div>
-          </div>
-                
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="ml-auto navbar-nav">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="https://ppobindo.com" target="_top">
                             <i class="fa fa-home pr-2" style="color:var(--font-color)">   Beranda</i>
@@ -188,7 +155,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="https://ppobindo.com/tvku/trans7" target="_top">
-                            <i class="fa-solid fa-tv" style="color:var(--font-color)">    Live TV</i>
+                            <i class="fa fa-calculator" style="color:var(--font-color)">    Live TV</i>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -199,11 +166,12 @@
                         </a>
                     </li>
                 </ul>
-            </div>
+                </div>
 
-            
+
         </div>
     </nav>
+
     </header>
  
 
@@ -303,7 +271,8 @@
                     <button class="game ui black button " id="joinButton">Submit</button>
                 </div>
                 <div style="text-align:center;">
-                    <p style="color:var(--font-color)" id="message"></p>
+                <i class="fas fa-spinner fa-spin fa-spin-reverse" style="color:var(--font-color);font-size: 1px;">
+                    <p style="color:var(--font-color);font-size: 20px;" id="message"></p></i>
                 </div>
             </form>
         </div>
@@ -329,13 +298,14 @@
                             <h3><strong>HISTORY</strong></h3>
                         </label>
                         <div id="pgn" style="overflow: auto; white-space: nowrap; width: 500px; margin: auto;"></div>
+                         <h2 id="vsText"></h2>
                     </div> -->
                 </div>
-                <div id="myBoard"></div>
-                <div style="text-align: center; margin-bottom: 20px;display: none;">
-                    <a href="/" class="ui button black" style="width: 569px;">LEAVE GAME</a>
-                </div>
-              <div style="position: fixed; bottom: 0; left: 10px;text-align: center; margin: 5px;">
+             
+                <div id="myBoard" class="mx-auto"></div>
+               
+               
+                <div style="position: fixed; bottom: 0; left: 10px;text-align: center; margin: 5px;">
 
                     <div class="ui teal buttons">
                         <div class="ui button" id="warna">Warna</div>
@@ -352,27 +322,26 @@
                     </div>
 
                     
-                    <!--<button id="surrenderBtn" class="ui button red">Nyerah</button>-->
+                    <button id="surrenderBtn" class="ui red button">✔ Nyerah</button>
                     
                    
                 </div>
-                    
+                </div>
             </div>
         </div>
-    </div>
-</div>
+            
+   </div>
 </div>
                
 
     <!-- Chatting window -->
     <div id="chat"
-        style=" background-color: white; display: none; text-align: right; position: fixed; bottom: 0; right: 0; margin-right: 10px; border: 2px solid black;">
+        style="cursor: pointer; display: none; text-align: right; position: fixed; bottom: 0; right: 0; margin-right: 10px;">
         
-        <div class="ui button green" style="border-radius: 0; width: 100%; padding: 15px; font-size: 14px;"
-            id="messageBox">
-            CHAT
+        <div id="messageBox"><img src="./img/chat.png" alt="🗨 Chat" width="70" class="mb-3">
+          
         </div>
-        <div id="chatBox" style="display: none; padding: 12px;">
+        <div id="chatBox" style="background-color: rgb(208, 209, 219); display: none; padding: 12px;">
             <div id="chatContent" style="height: 240px; overflow-y: auto; word-break: break-all; ">
                 <!-- <div class="myMessage">Hello</div>
                 <div class="youMessage">his</div> -->
@@ -381,11 +350,14 @@
                 <div style="display: flex; justify-content: space-around;">
                     <input class="form-control " id="inputMessage" type="text" placeholder="Enter a Message"
                         style="margin-right: 10px;">
-                    <button class="ui black button" id="send">SEND</button>
+                    <button class="ui black button" id="send">➤</button>
                 </div>
             </form>
         </div>
     </div>
+  
+  <!-- MODAL PEMENANG -->
+ 
     
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
