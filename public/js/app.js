@@ -235,6 +235,7 @@ socket.on("gameOver", (turn, isCheckmate, surrendered) => {
   if (surrendered) {
     if (socket.id !== turn) {
       statusEl.textContent = "🎉 Menang..Lawan Menyerah"
+        winAudio.play();
     } else {
       statusEl.textContent = "Menyerah Kalah!"
     }
