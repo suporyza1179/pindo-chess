@@ -50,8 +50,14 @@ io.on('connection', (socket) => {
 
     //Creating and joining the room
     socket.on('joinRoom', ({ user, room }, callback) => {
+            socket.user = user; // Simpan nama pengguna
+            socket.join(room);
+            console.log(`${user} has joined ${room}`);
+            io.to(room).emit('userJoined', `${user} vs ${room}`); // Kirim notifikasi ke room
+
+        
         //We have to limit the number of users in a room to be just 2
-        if (io.nsps['/'].adapter.rooms[room] && io.nsps['/'].adapter.rooms[room].length === 2) {
+        if (io.nsps['/'].adapter.rooms[room] && io.nsps['/'].adapter.rooms[room].length === 3) {
             return callback('Room Penuh!')
         }
 
@@ -67,7 +73,7 @@ io.on('connection', (socket) => {
             return callback('Nama ada yang sama!')
         }
 
-        socket.join(room)
+       // socket.join(room)
         //Rooms List Update
         roomsList.add(room);
         io.emit('roomsList', Array.from(roomsList));
@@ -96,6 +102,11 @@ io.on('connection', (socket) => {
             updateStatus(game, room)
         }
     })
+
+    socket.on('chatMessage', ({ room, message }) => {
+    const user = socket.user; // Ambil nama pengguna
+    io.to(room).emit('message', { user: user, text: message }); // Kirim pesan ke room
+    });
 
     //For catching dropped event
     socket.on('Dropped', ({ source, target, room }) => {
