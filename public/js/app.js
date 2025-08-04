@@ -42,9 +42,11 @@ function onDragStart2(source, piece, position, orientation) {
             if (turnt === 1) {
                 alert('Keren 🎉 Menang...!!');
                 winAudio.play();
+                winAudio.volume = 0.20;
             } else {
                 alert('Kalah Niyeee..😄');
                 winAudio.play();
+                winAudio.volume = 0.20;
             }
         return false
     }
@@ -177,8 +179,8 @@ socket.on('inCheck', turn => {
 
 //Client disconnected in between
 socket.on('disconnectedStatus', () => {
-    alert('Opponent left the game!!')
-    messageEl.textContent = 'Opponent left the game!!'
+    alert('Lawan Kabur!!')
+    messageEl.textContent = 'Lawan Kabur!!'
 })
 
 //Receiving a message
@@ -236,12 +238,15 @@ socket.on("gameOver", (turn, isCheckmate, surrendered) => {
     if (socket.id !== turn) {
       statusEl.textContent = "🎉 Menang..Lawan Menyerah"
         winAudio.play();
+        winAudio.volume = 0.20;
     } else {
       statusEl.textContent = "Menyerah Kalah!"
+        winAudio.play();
+        winAudio.volume = 0.20;
     }
   } else if (isCheckmate) {
     winAudio.play();
-       
+    winAudio.volume = 0.20;
             if (board.orientation().includes(turn)) {
             statusEl.textContent = "Kalah Niyeee..😄"
             }
@@ -308,6 +313,15 @@ multiPlayerEl.addEventListener('click', (e) => {
         orientation: 'white'
     }
 })
+
+socket.on('userJoined', (message) => {
+  console.log(message);
+  document.getElementById("vsText").innerText = (message);
+});
+
+socket.on('message', (data) => {
+  console.log(`${data.username}: ${data.text}`);
+});
 
 const applyColorScheme = (black, white) => {
     const blackEl = document.querySelectorAll('.black-3c85d');
