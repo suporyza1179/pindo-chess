@@ -141,7 +141,7 @@ html {
     transform: rotate(-135deg);
 }
 .navbar-toggler.collapsed .top-bar{
-    margin-top: -10px;
+    margin-top: -6px;
     transform: rotate(0deg);
 }
 .navbar-toggler.collapsed .middle-bar{
@@ -149,7 +149,7 @@ html {
     filter: alpha(opacity=100);
 }
 .navbar-toggler.collapsed .bottom-bar{
-    margin-top: 10px;
+    margin-top: 6px;
     transform: rotate(0deg);
 }
 .navbar-toggler.collapsed .toggler-icon{
