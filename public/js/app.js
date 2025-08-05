@@ -159,7 +159,7 @@ function onDrop2(source, target) {
     if (move === null) return 'snapback'
     turnt = 1 - turnt;
     // make random legal move for black
-    window.setTimeout(makeAIMove, 250)
+    setTimeout(makeAIMove, 250)
     //window.setTimeout(makeRandomMove, 250)
 }
 
