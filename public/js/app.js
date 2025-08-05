@@ -15,6 +15,62 @@ const chatContentEl = document.getElementById('chatContent')
 var config = {};
 var board = null;
 var game = new Chess()
+
+function evaluateBoard(g) {
+    const values = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+    const fen = g.fen().split(" ")[0];
+    let score = 0;
+    for (const char of fen) {
+        if (/[prnbqk]/i.test(char)) {
+            const val = values[char.toLowerCase()];
+            if (char === char.toUpperCase()) score += val;
+            else score -= val;
+        }
+    }
+    return score;
+}
+
+function minimax(g, depth, isMax) {
+    if (depth === 0) return evaluateBoard(g);
+
+    const moves = g.moves();
+    if (isMax) {
+        let max = -Infinity;
+        for (const move of moves) {
+            g.move(move);
+            max = Math.max(max, minimax(g, depth - 1, false));
+            g.undo();
+        }
+        return max;
+    } else {
+        let min = Infinity;
+        for (const move of moves) {
+            g.move(move);
+            min = Math.min(min, minimax(g, depth - 1, true));
+            g.undo();
+        }
+        return min;
+    }
+}
+
+function getBestMove(depth) {
+    let bestMove = null;
+    let bestScore = -Infinity;
+    const moves = game.moves();
+
+    for (const move of moves) {
+        game.move(move);
+        const score = minimax(game, depth - 1, false);
+        game.undo();
+        if (score > bestScore) {
+            bestScore = score;
+            bestMove = move;
+        }
+    }
+
+    return bestMove;
+}
+
 var turnt = 0;
 
 // initializing semantic UI dropdown
@@ -54,7 +110,7 @@ function onDragStart2(source, piece, position, orientation) {
     // only pick up pieces for White
     if (piece.search(/^b/) !== -1) return false
 }
-
+/*
 function makeRandomMove() {
     var possibleMoves = game.moves()
 
@@ -65,6 +121,27 @@ function makeRandomMove() {
 
     var randomIdx = Math.floor(Math.random() * possibleMoves.length)
     game.move(possibleMoves[randomIdx]);
+    myAudioEl.play();
+    turnt = 1 - turnt;
+    board.position(game.fen());
+}
+*/
+function makeAIMove() {
+    const levelEl = document.getElementById("difficulty");
+    const level = levelEl ? parseInt(levelEl.value) : 1;
+    const moves = game.moves();
+    if (moves.length === 0) return;
+
+    let move;
+
+    if (level === 1) {
+        const randomIdx = Math.floor(Math.random() * moves.length);
+        move = moves[randomIdx];
+    } else {
+        move = getBestMove(level); // level = depth (2: sedang, 3: sulit)
+    }
+
+    game.move(move);
     myAudioEl.play();
     turnt = 1 - turnt;
     board.position(game.fen());
@@ -82,7 +159,8 @@ function onDrop2(source, target) {
     if (move === null) return 'snapback'
     turnt = 1 - turnt;
     // make random legal move for black
-    window.setTimeout(makeRandomMove, 250)
+    window.setTimeout(makeAIMove, 250)
+    //window.setTimeout(makeRandomMove, 250)
 }
 
 // update the board position after the piece snap
