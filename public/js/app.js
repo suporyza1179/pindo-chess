@@ -159,7 +159,9 @@ function onDrop2(source, target) {
     if (move === null) return 'snapback'
     turnt = 1 - turnt;
     // make random legal move for black
-    setTimeout(makeAIMove, 250)
+    if (game.turn() === 'b') {
+      setTimeout(makeAIMove, 250);
+    }
     //window.setTimeout(makeRandomMove, 250)
 }
 
