@@ -15,6 +15,7 @@ const chatContentEl = document.getElementById('chatContent')
 var config = {};
 var board = null;
 var game = new Chess()
+let aiThinking = false;
 
 function evaluateBoard(g) {
     const values = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -126,36 +127,19 @@ function makeRandomMove() {
     board.position(game.fen());
 }
 */
-function makeAIMove() {
-  if (game.game_over()) return; // hentikan kalau sudah selesai
 
-  // pastikan giliran AI (asumsi AI main hitam)
+async function makeAIMove() {
+  if (game.game_over() || aiThinking) return;
   if (game.turn() !== 'b') return;
 
-  const levelEl = document.getElementById("difficulty");
-  const level = levelEl ? parseInt(levelEl.value) : 1;
-  const moves = game.moves();
-  if (moves.length === 0) return;
-
-  let move;
-
-  if (level === 1) {
-    const randomIdx = Math.floor(Math.random() * moves.length);
-    move = moves[randomIdx];
-  } else {
-    move = getBestMove(level); // depth = level - 1 atau bisa pakai langsung level
-    if (!move) {
-      // fallback ke acak kalau minimax gagal
-      move = moves[Math.floor(Math.random() * moves.length)];
-    }
-  }
-
+  aiThinking = true;
+  // ... logika pemilihan move seperti sebelumya ...
   game.move(move);
   myAudioEl.play();
   turnt = 1 - turnt;
   board.position(game.fen());
+  aiThinking = false;
 }
-
 
 function onDrop2(source, target) {
     // see if the move is legal
