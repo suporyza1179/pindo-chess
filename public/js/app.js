@@ -127,25 +127,35 @@ function makeRandomMove() {
 }
 */
 function makeAIMove() {
-    const levelEl = document.getElementById("difficulty");
-    const level = levelEl ? parseInt(levelEl.value) : 1;
-    const moves = game.moves();
-    if (moves.length === 0) return;
+  if (game.game_over()) return; // hentikan kalau sudah selesai
 
-    let move;
+  // pastikan giliran AI (asumsi AI main hitam)
+  if (game.turn() !== 'b') return;
 
-    if (level === 1) {
-        const randomIdx = Math.floor(Math.random() * moves.length);
-        move = moves[randomIdx];
-    } else {
-        move = getBestMove(level); // level = depth (2: sedang, 3: sulit)
+  const levelEl = document.getElementById("difficulty");
+  const level = levelEl ? parseInt(levelEl.value) : 1;
+  const moves = game.moves();
+  if (moves.length === 0) return;
+
+  let move;
+
+  if (level === 1) {
+    const randomIdx = Math.floor(Math.random() * moves.length);
+    move = moves[randomIdx];
+  } else {
+    move = getBestMove(level); // depth = level - 1 atau bisa pakai langsung level
+    if (!move) {
+      // fallback ke acak kalau minimax gagal
+      move = moves[Math.floor(Math.random() * moves.length)];
     }
+  }
 
-    game.move(move);
-    myAudioEl.play();
-    turnt = 1 - turnt;
-    board.position(game.fen());
+  game.move(move);
+  myAudioEl.play();
+  turnt = 1 - turnt;
+  board.position(game.fen());
 }
+
 
 function onDrop2(source, target) {
     // see if the move is legal
@@ -160,8 +170,13 @@ function onDrop2(source, target) {
     turnt = 1 - turnt;
     // make random legal move for black
     if (game.turn() === 'b') {
-      setTimeout(makeAIMove, 250);
+  setTimeout(() => {
+    // double-check supaya tidak dipanggil ganda
+    if (game.turn() === 'b' && !game.game_over()) {
+      makeAIMove();
     }
+  }, 250);
+}
     //window.setTimeout(makeRandomMove, 250)
 }
 
