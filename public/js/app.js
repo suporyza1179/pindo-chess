@@ -17,61 +17,6 @@ var board = null;
 var game = new Chess()
 
 
-function evaluateBoard(g) {
-    const values = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-    const fen = g.fen().split(" ")[0];
-    let score = 0;
-    for (const char of fen) {
-        if (/[prnbqk]/i.test(char)) {
-            const val = values[char.toLowerCase()];
-            if (char === char.toUpperCase()) score += val;
-            else score -= val;
-        }
-    }
-    return score;
-}
-
-function minimax(g, depth, isMax) {
-    if (depth === 0) return evaluateBoard(g);
-
-    const moves = g.moves();
-    if (isMax) {
-        let max = -Infinity;
-        for (const move of moves) {
-            g.move(move);
-            max = Math.max(max, minimax(g, depth - 1, false));
-            g.undo();
-        }
-        return max;
-    } else {
-        let min = Infinity;
-        for (const move of moves) {
-            g.move(move);
-            min = Math.min(min, minimax(g, depth - 1, true));
-            g.undo();
-        }
-        return min;
-    }
-}
-
-function getBestMove(depth) {
-    let bestMove = null;
-    let bestScore = -Infinity;
-    const moves = game.moves();
-
-    for (const move of moves) {
-        game.move(move);
-        const score = minimax(game, depth - 1, false);
-        game.undo();
-        if (score > bestScore) {
-            bestScore = score;
-            bestMove = move;
-        }
-    }
-
-    return bestMove;
-}
-
 var turnt = 0;
 
 // initializing semantic UI dropdown
@@ -127,37 +72,6 @@ function makeRandomMove() {
     board.position(game.fen());
 }
 */
-
-function makeAIMove() {
-  if (game.game_over()) return; // hentikan kalau sudah selesai
-
-  // pastikan giliran AI (asumsi AI main hitam)
-  if (game.turn() !== 'b') return;
-
-  const levelEl = document.getElementById("difficulty");
-  const level = levelEl ? parseInt(levelEl.value) : 1;
-  const moves = game.moves();
-  if (moves.length === 0) return;
-
-  let move;
-
-  if (level === 1) {
-    const randomIdx = Math.floor(Math.random() * moves.length);
-    move = moves[randomIdx];
-  } else {
-    move = getBestMove(level); // depth = level - 1 atau bisa pakai langsung level
-    if (!move) {
-      // fallback ke acak kalau minimax gagal
-      move = moves[Math.floor(Math.random() * moves.length)];
-    }
-  }
-
-  game.move(move);
-  myAudioEl.play();
-  turnt = 1 - turnt;
-  board.position(game.fen());
-}
-
 
 function onDrop2(source, target) {
     // see if the move is legal
