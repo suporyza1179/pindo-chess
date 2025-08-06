@@ -7,11 +7,18 @@ var Chess = require('chess.js').Chess;
 
 const app = express()
 const server = http.createServer(app)
-const io = socketio(server)
+//const io = socketio(server)
+const io = require('socket.io')(server, {
+  cors: {
+    origin: "*", // untuk development
+    methods: ["GET", "POST"]
+  }
+});
+
 
 const port = process.env.PORT || 3000
-//const publicDirectoryPath = path.join(__dirname, '../public')
-const publicDirectoryPath = path.join('https://ppobindo.com/getflix/game/catur/online/')
+const publicDirectoryPath = path.join(__dirname, '../public')
+
 
 
 app.use(express.static(publicDirectoryPath))
