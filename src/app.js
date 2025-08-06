@@ -11,7 +11,7 @@ const io = socketio(server)
 
 const port = process.env.PORT || 3000
 //const publicDirectoryPath = path.join(__dirname, '../public')
-const publicDirectoryPath = path.join(__dirname, 'https://ppobindo.com/getflix/game/catur/online/')
+const publicDirectoryPath = path.join('https://ppobindo.com/getflix/game/catur/online/')
 
 
 app.use(express.static(publicDirectoryPath))
