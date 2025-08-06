@@ -1,0 +1,497 @@
+const formEl = document.querySelectorAll('#joinForm > div > input')
+const joinButtonEl = document.querySelector('#joinButton')
+const messageEl = document.querySelector('#message')
+const statusEl = document.querySelector('#status')
+const ChatEl = document.querySelector('#chat')
+const sendButtonEl = document.querySelector('#send')
+const roomsListEl = document.getElementById('roomsList');
+const myAudioEl = document.getElementById('myAudio');
+const winAudio = document.getElementById('winAudio');
+const singlePlayerEl = document.getElementById('singlePlayer');
+const multiPlayerEl = document.getElementById('multiPlayer');
+const totalRoomsEl = document.getElementById('rooms')
+const totalPlayersEl = document.getElementById('players')
+const chatContentEl = document.getElementById('chatContent')
+var config = {};
+var board = null;
+var game = new Chess()
+
+
+function evaluateBoard(g) {
+    const values = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+    const fen = g.fen().split(" ")[0];
+    let score = 0;
+    for (const char of fen) {
+        if (/[prnbqk]/i.test(char)) {
+            const val = values[char.toLowerCase()];
+            if (char === char.toUpperCase()) score += val;
+            else score -= val;
+        }
+    }
+    return score;
+}
+
+function minimax(g, depth, isMax) {
+    if (depth === 0) return evaluateBoard(g);
+
+    const moves = g.moves();
+    if (isMax) {
+        let max = -Infinity;
+        for (const move of moves) {
+            g.move(move);
+            max = Math.max(max, minimax(g, depth - 1, false));
+            g.undo();
+        }
+        return max;
+    } else {
+        let min = Infinity;
+        for (const move of moves) {
+            g.move(move);
+            min = Math.min(min, minimax(g, depth - 1, true));
+            g.undo();
+        }
+        return min;
+    }
+}
+
+function getBestMove(depth) {
+    let bestMove = null;
+    let bestScore = -Infinity;
+    const moves = game.moves();
+
+    for (const move of moves) {
+        game.move(move);
+        const score = minimax(game, depth - 1, false);
+        game.undo();
+        if (score > bestScore) {
+            bestScore = score;
+            bestMove = move;
+        }
+    }
+
+    return bestMove;
+}
+
+var turnt = 0;
+
+// initializing semantic UI dropdown
+$('.ui.dropdown')
+    .dropdown();
+
+
+// function for defining onchange on dropdown menus
+$("#roomDropdown").dropdown({
+    onChange: function (val) {
+        console.log(val)
+        console.log('running the function')
+        formEl[1].value = val
+    }
+});
+
+
+function onDragStart2(source, piece, position, orientation) {
+    // do not pick up pieces if the game is over
+    if (game.game_over()) {
+        if (game.in_draw()) {
+            alert('Remis!!');
+        }
+        else if (game.in_checkmate())
+            if (turnt === 1) {
+                alert('Keren 🎉 Menang...!!');
+                winAudio.play();
+                winAudio.volume = 0.20;
+            } else {
+                alert('Kalah Niyeee..😄');
+                winAudio.play();
+                winAudio.volume = 0.20;
+            }
+        return false
+    }
+
+    // only pick up pieces for White
+    if (piece.search(/^b/) !== -1) return false
+}
+/*
+function makeRandomMove() {
+    var possibleMoves = game.moves()
+
+    // game over
+    if (possibleMoves.length === 0) {
+        return;
+    }
+
+    var randomIdx = Math.floor(Math.random() * possibleMoves.length)
+    game.move(possibleMoves[randomIdx]);
+    myAudioEl.play();
+    turnt = 1 - turnt;
+    board.position(game.fen());
+}
+*/
+
+function makeAIMove() {
+  if (game.game_over()) return; // hentikan kalau sudah selesai
+
+  // pastikan giliran AI (asumsi AI main hitam)
+  if (game.turn() !== 'b') return;
+
+  const levelEl = document.getElementById("difficulty");
+  const level = levelEl ? parseInt(levelEl.value) : 1;
+  const moves = game.moves();
+  if (moves.length === 0) return;
+
+  let move;
+
+  if (level === 1) {
+    const randomIdx = Math.floor(Math.random() * moves.length);
+    move = moves[randomIdx];
+  } else {
+    move = getBestMove(level); // depth = level - 1 atau bisa pakai langsung level
+    if (!move) {
+      // fallback ke acak kalau minimax gagal
+      move = moves[Math.floor(Math.random() * moves.length)];
+    }
+  }
+
+  game.move(move);
+  myAudioEl.play();
+  turnt = 1 - turnt;
+  board.position(game.fen());
+}
+
+
+function onDrop2(source, target) {
+    // see if the move is legal
+    var move = game.move({
+        from: source,
+        to: target,
+        promotion: 'q' // NOTE: always promote to a queen for example simplicity
+    })
+    myAudioEl.play();
+    // illegal move
+    if (move === null) return 'snapback'
+    turnt = 1 - turnt;
+    // make random legal move for black
+    if (game.turn() === 'b') {
+  setTimeout(() => {
+    // double-check supaya tidak dipanggil ganda
+    if (game.turn() === 'b' && !game.game_over()) {
+      makeAIMove();
+    }
+  }, 250);
+}
+    //window.setTimeout(makeRandomMove, 250)
+}
+
+// update the board position after the piece snap
+// for castling, en passant, pawn promotion
+function onSnapEnd2() {
+    board.position(game.fen())
+}
+
+singlePlayerEl.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('gameMode').style.display = "none";
+    document.querySelector('#chessGame').style.display = null;
+    config = {
+        draggable: true,
+        position: 'start',
+        onDragStart: onDragStart2,
+        onDrop: onDrop2,
+        onSnapEnd: onSnapEnd2
+    }
+    board = Chessboard('myBoard', config);
+})
+
+//Connection will be established after webpage is refreshed
+const socket = io()
+
+//Triggers after a piece is dropped on the board
+function onDrop(source, target) {
+    //emits event after piece is dropped
+    var room = formEl[1].value;
+    myAudioEl.play();
+    socket.emit('Dropped', { source, target, room })
+}
+
+//Update Status Event
+socket.on('updateEvent', ({ status, fen, pgn }) => {
+    statusEl.textContent = status
+    fenEl.textContent = fen
+    pgnEl.textContent = pgn
+})
+
+socket.on('printing', (fen) => {
+    console.log(fen)
+})
+
+//Catch Display event
+socket.on('DisplayBoard', (fenString, userId, pgn) => {
+    console.log(fenString)
+    //This is to be done initially only
+    if (userId != undefined) {
+        messageEl.textContent = 'Permainan Dimulai...'
+        if (socket.id == userId) {
+            config.orientation = 'black'
+        }
+        document.getElementById('joinFormDiv').style.display = "none";
+        document.querySelector('#chessGame').style.display = null
+        ChatEl.style.display = null
+        document.getElementById('statusPGN').style.display = null
+    }
+
+    config.position = fenString
+    board = ChessBoard('myBoard', config)
+    document.getElementById('pgn').textContent = pgn
+})
+
+//To turn off dragging
+socket.on('Dragging', id => {
+    if (socket.id != id) {
+        config.draggable = true;
+    } else {
+        config.draggable = false;
+    }
+})
+
+//To Update Status Element
+socket.on('updateStatus', (turn) => {
+    if (board.orientation().includes(turn)) {
+        statusEl.textContent = "▶️ Giliran Kamu"
+    }
+    else {
+        statusEl.textContent = "⌛Giliran Lawan..Sabar ya"
+    }
+})
+
+//If in check
+socket.on('inCheck', turn => {
+    if (board.orientation().includes(turn)) {
+        statusEl.textContent = "Kamu kena SKAK!!"
+    }
+    else {
+        statusEl.textContent = "Lawan Kena SKAK!!"
+    }
+})
+
+
+//Client disconnected in between
+socket.on('disconnectedStatus', () => {
+    alert('Lawan Kabur!!')
+    messageEl.textContent = 'Lawan Kabur!!'
+})
+
+//Receiving a message
+socket.on('receiveMessage', (user, message) => {
+    var chatContentEl = document.getElementById('chatContent')
+    //Create a div element for using bootstrap
+    chatContentEl.scrollTop = chatContentEl.scrollHeight;
+    var divEl = document.createElement('div')
+    if (formEl[0].value == user) {
+        divEl.classList.add('myMessage');
+        divEl.textContent = message;
+    }
+    else {
+        divEl.classList.add('youMessage');
+        divEl.textContent = message;
+        document.getElementById('messageTone').play();
+    }
+    var style = window.getComputedStyle(document.getElementById('chatBox'));
+    if (style.display === 'none') {
+        document.getElementById('chatBox').style.display = 'block';
+    }
+    chatContentEl.appendChild(divEl);
+    divEl.focus();
+    divEl.scrollIntoView();
+
+})
+
+//Rooms List update
+socket.on('roomsList', (rooms) => {
+    // roomsListEl.innerHTML = null;
+    // console.log('Rooms List event triggered!! ',  rooms);
+    totalRoomsEl.innerHTML = rooms.length
+    var dropRooms = document.getElementById('dropRooms')
+    while (dropRooms.firstChild) {
+        dropRooms.removeChild(dropRooms.firstChild)
+    }
+    // added event listener to each room
+    rooms.forEach(x => {
+        var roomEl = document.createElement('div')
+        roomEl.setAttribute('class', 'item')
+
+        roomEl.setAttribute('data-value', x)
+        roomEl.textContent = x;
+        dropRooms.appendChild(roomEl)
+    })
+})
+
+socket.on('updateTotalUsers', totalUsers => {
+    console.log('event listened')
+    totalPlayersEl.innerHTML = totalUsers;
+})
+
+socket.on("gameOver", (turn, isCheckmate, surrendered) => {
+  if (surrendered) {
+    if (socket.id !== turn) {
+      statusEl.textContent = "🎉 Menang..Lawan Menyerah"
+        winAudio.play();
+        winAudio.volume = 0.20;
+    } else {
+      statusEl.textContent = "Menyerah Kalah!"
+        winAudio.play();
+        winAudio.volume = 0.20;
+    }
+  } else if (isCheckmate) {
+    winAudio.play();
+    winAudio.volume = 0.20;
+            if (board.orientation().includes(turn)) {
+            statusEl.textContent = "Kalah Niyeee..😄"
+            }
+                else {
+                statusEl.textContent = "Keren..🎉 Kamu Menang!!"
+            }
+   
+  } else {
+   statusEl.textContent = "Remis!"
+  }
+
+  // Set game status, disable board, dsb
+});
+
+//Message will be sent only after you click the button
+sendButtonEl.addEventListener('click', (e) => {
+    e.preventDefault()
+    var message = document.querySelector('#inputMessage').value
+    var user = formEl[0].value
+    var room = formEl[1].value
+    document.querySelector('#inputMessage').value = ''
+    document.querySelector('#inputMessage').focus()
+    socket.emit('sendMessage', { user, room, message })
+})
+
+//Connect clients only after they click Join
+joinButtonEl.addEventListener('click', (e) => {
+    e.preventDefault()
+
+    var user = formEl[0].value, room = formEl[1].value
+
+    if (!user || !room) {
+        messageEl.textContent = "Input fields can't be empty!"
+    }
+    else {
+        joinButtonEl.setAttribute("disabled", "disabled");
+        formEl[0].setAttribute("disabled", "disabled")
+        document.querySelector('#roomDropdownP').style.display = 'none';
+        formEl[1].setAttribute("disabled", "disabled")
+        //Now Let's try to join it in room // If users more than 2 we will 
+        socket.emit('joinRoom', { user, room }, (error) => {
+            messageEl.textContent = error
+            if (alert(error)) {
+                window.location.reload()
+            }
+            else    //to reload even if negative confirmation
+                window.location.reload();
+        })
+        messageEl.textContent = "Menunggu Lawan..."
+    }
+})
+
+multiPlayerEl.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('joinFormDiv').style.display = "block";
+    document.getElementById('gameMode').style.display = "none";
+    //Server will create a game and clients will play it
+    //Clients just have to diaplay the game
+    var board = ChessBoard('myBoard')
+    config = {
+        draggable: false,   //Initially
+        position: 'start',
+        onDrop: onDrop,
+        orientation: 'white'
+    }
+})
+
+socket.on('userJoined', (message) => {
+  console.log(message);
+  document.getElementById("vsText").innerText = (message);
+});
+
+socket.on('message', (data) => {
+  console.log(`${data.username}: ${data.text}`);
+});
+
+const applyColorScheme = (black, white) => {
+    const blackEl = document.querySelectorAll('.black-3c85d');
+    for (var i = 0; i < blackEl.length; i++) {
+        blackEl[i].style.backgroundColor = black;
+        blackEl[i].style.color = white;
+    }
+    const whiteEl = document.querySelectorAll('.white-1e1d7');
+    for (var i = 0; i < whiteEl.length; i++) {
+        whiteEl[i].style.backgroundColor = white;
+        whiteEl[i].style.color = black;
+    }
+}
+
+
+// Color Buttons
+document.getElementById('grey_board').addEventListener('click', e => {
+    e.preventDefault();
+    
+    applyColorScheme("#E1E1E1", "#FFFFFF");
+})
+
+document.getElementById('orange_board').addEventListener('click', e => {
+    e.preventDefault();
+    
+    applyColorScheme("#D18B47", "#FFCE9E");
+})
+
+document.getElementById('green_board').addEventListener('click', e => {
+    e.preventDefault();
+    
+    applyColorScheme("#58AC8A", "#FFFFFF");
+})
+
+document.getElementById('blue_board').addEventListener('click', e => {
+    e.preventDefault();
+    
+    applyColorScheme("#727FA2", "#C3C6BE");
+})
+
+// Messages Modal
+document.getElementById('messageBox').addEventListener('click', e => {
+    e.preventDefault();
+    var style = window.getComputedStyle(document.getElementById('chatBox'));
+    if (style.display === 'none') {
+        document.getElementById('chatBox').style.display = 'block';
+    } else {
+        document.getElementById('chatBox').style.display = 'none';
+    }
+})
+
+document.getElementById('warna').addEventListener('click', e => {
+    e.preventDefault();
+    var style = window.getComputedStyle(document.getElementById('gantiWarna'));
+    if (style.display === 'none') {
+        document.getElementById('gantiWarna').style.display = 'block';
+    } else {
+        document.getElementById('gantiWarna').style.display = 'none';
+    }
+})
+
+document.getElementById('surrenderBtn')?.addEventListener('click', () => {
+    
+  const confirmation = confirm("Apakah kamu yakin ingin menyerah?");
+  if (confirmation) {
+    
+    var room = formEl[1].value;
+    config.draggable = false;
+    socket.emit('surrender', { room })
+
+  //  statusEl.textContent = "Menyerah"
+    winAudio.play();
+    
+  }
+});
+
