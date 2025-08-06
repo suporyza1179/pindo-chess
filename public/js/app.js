@@ -102,7 +102,7 @@ function onSnapEnd2() {
     board.position(game.fen())
 }
 
-singlePlayerEl.addEventListener('click', (e) => {
+/*singlePlayerEl.addEventListener('click', (e) => {
     e.preventDefault();
     document.getElementById('gameMode').style.display = "none";
     document.querySelector('#chessGame').style.display = null;
@@ -114,7 +114,7 @@ singlePlayerEl.addEventListener('click', (e) => {
         onSnapEnd: onSnapEnd2
     }
     board = Chessboard('myBoard', config);
-})
+})*/
 
 //Connection will be established after webpage is refreshed
 const socket = io()
