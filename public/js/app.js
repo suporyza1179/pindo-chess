@@ -2,11 +2,16 @@ const formEl = document.querySelectorAll('#joinForm > div > input')
 const joinButtonEl = document.querySelector('#joinButton')
 const messageEl = document.querySelector('#message')
 const statusEl = document.querySelector('#status')
+const statusN = document.getElementById('statusNyerah');
+const statusK = document.getElementById('alertStatus');
+const statusC = document.getElementById('confirmNyerah');
 const ChatEl = document.querySelector('#chat')
 const sendButtonEl = document.querySelector('#send')
 const roomsListEl = document.getElementById('roomsList');
 const myAudioEl = document.getElementById('myAudio');
 const winAudio = document.getElementById('winAudio');
+const skakAudio = document.getElementById('sekakAudio');
+const ketawaAudio = document.getElementById('ketawaAudio');
 const singlePlayerEl = document.getElementById('singlePlayer');
 const multiPlayerEl = document.getElementById('multiPlayer');
 const totalRoomsEl = document.getElementById('rooms')
@@ -179,19 +184,23 @@ socket.on('updateStatus', (turn) => {
 
 //If in check
 socket.on('inCheck', turn => {
-    if (board.orientation().includes(turn)) {
+     if (board.orientation().includes(turn)) {
         statusEl.textContent = "Kamu kena SKAK!!"
+        skakAudio.play();
     }
     else {
         statusEl.textContent = "Lawan Kena SKAK!!"
+        skakAudio.play();
     }
 })
 
 
 //Client disconnected in between
 socket.on('disconnectedStatus', () => {
-    alert('Lawan Kabur!!')
-    messageEl.textContent = 'Lawan Kabur!!'
+    const modal = document.getElementById('alertModal');
+    const alertModal = new bootstrap.Modal(modal);
+    alertModal.show();
+    statusK.textContent = 'Lawan Kabur!!'
 })
 
 //Receiving a message
@@ -245,24 +254,41 @@ socket.on('updateTotalUsers', totalUsers => {
 })
 
 socket.on("gameOver", (turn, isCheckmate, surrendered) => {
+    document.getElementById('status').style.display = "none";
   if (surrendered) {
+  
+   const modal = document.getElementById('winnerModal');
+    const winnerModal = new bootstrap.Modal(modal);
+      winnerModal.show();
+      
     if (socket.id !== turn) {
-      statusEl.textContent = "🎉 Menang..Lawan Menyerah"
+    
+        statusN.textContent = "🎉 Menang..Lawan Menyerah"
         winAudio.play();
         winAudio.volume = 0.20;
+  
     } else {
-      statusEl.textContent = "Menyerah Kalah!"
-        winAudio.play();
-        winAudio.volume = 0.20;
+      document.getElementById('piala').style.display = "none";
+      document.getElementById('ketawaGif').style.display = "block";
+      ketawaAudio.play();
+      statusN.textContent = "Menyerah Kalah!"
     }
   } else if (isCheckmate) {
-    winAudio.play();
-    winAudio.volume = 0.20;
+    const modal = document.getElementById('winnerModal');
+    const winnerModal = new bootstrap.Modal(modal);
+    winnerModal.show();
             if (board.orientation().includes(turn)) {
-            statusEl.textContent = "Kalah Niyeee..😄"
+                document.getElementById('piala').style.display = "none";
+                document.getElementById('ketawaGif').style.display = "block";
+                ketawaAudio.play();
+                statusN.textContent = "Kalah Niyeee..😄"
+               
             }
                 else {
-                statusEl.textContent = "Keren..🎉 Kamu Menang!!"
+                statusN.textContent = "Keren..🎉 Kamu Menang!!"
+                winAudio.play();
+                winAudio.volume = 0.20;
+                
             }
    
   } else {
@@ -396,16 +422,22 @@ document.getElementById('warna').addEventListener('click', e => {
 
 document.getElementById('surrenderBtn')?.addEventListener('click', () => {
     
-  const confirmation = confirm("Apakah kamu yakin ingin menyerah?");
-  if (confirmation) {
-    
+  const modal = document.getElementById('confNyerah');
+    const confNyerah = new bootstrap.Modal(modal);
+    confNyerah.show();
+    statusC.textContent = 'Yakin ingin menyerah?'
+
+    document.getElementById('yesNyerah')?.addEventListener('click', () => {
+
     var room = formEl[1].value;
     config.draggable = false;
     socket.emit('surrender', { room })
+    confNyerah.hide();
+  });
 
-  //  statusEl.textContent = "Menyerah"
-    winAudio.play();
-    
-  }
+  document.getElementById('noNyerah')?.addEventListener('click', () => {
+
+    confNyerah.hide();
+  });
 });
 
