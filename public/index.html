@@ -119,6 +119,14 @@
         <source src="./mp3/champ.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
+    <audio id="sekakAudio">
+        <source src="./mp3/skak.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+     <audio id="ketawaAudio">
+        <source src="./mp3/ketawa.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
     <!-- Navbar -->
 
  <header>
@@ -311,6 +319,9 @@
 
                     
                     <button id="surrenderBtn" class="ui red button">✔ Nyerah</button>
+                    <button id="backBtn" class="ui green button" onclick="window.location.href='https://ppobindo.com/getflix/game/pindochess.php/';" style="border-radius: 50%;">
+                        <i class="fa-sign-in-alt fas" style="color:var(--font-color)"></i>
+                    </button>
                     
                    
                 </div>
@@ -345,7 +356,47 @@
     </div>
   
   <!-- MODAL PEMENANG -->
- 
+ <!-- MODAL PEMENANG -->
+  <div class="modal fade" id="winnerModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center p-4" style="background-color:var(--bg-color);justify-content:center;">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <img src="./img/thropy.png" id="piala" alt="Piala" style="display: block;width: 100px;height: 100px;margin: auto;">
+        <img src="./img/ketawa.gif" id="ketawaGif" alt="ketawa" style="display: none;width: 200px;height: 100px;margin: auto;">
+        
+        <h3 style="color:var(--font-color)" id="statusNyerah"></h3>
+        <button class="btn btn-primary mt-3" data-bs-dismiss="modal" onclick="window.location.href='https://ppobindo.com/getflix/game/pindochess.php/';">Main Lagi</button>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="alertModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center p-4" style="background-color:var(--bg-color);justify-content:center;">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h3 style="color:var(--font-color)" id="alertStatus"></h3>
+        <button class="btn btn-primary mt-3" data-bs-dismiss="modal" onclick="window.location.href='https://ppobindo.com/getflix/game/pindochess.php/';">Cari Lawan</button>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="confNyerah" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" style="background-color:var(--bg-color);">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      
+      <div class="modal-body">
+        <h3 style="color:var(--font-color)" id="confirmNyerah"></h3>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="noNyerah" data-bs-dismiss="modal" aria-label="Close">No</button>
+        <button type="button" class="btn btn-primary" id="yesNyerah">Ya</button>
+      </div>
+    </div>
+  </div>
+</div>
     
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
